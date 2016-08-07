@@ -1,0 +1,103 @@
+﻿
+@model System.Data.DataTable
+
+@{
+    ViewBag.Title = "read";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    
+}
+
+<div>
+    
+    <div class='col-xs-6'>
+        
+        <div class='panel panel-default'>
+            <div class='panel-heading'>
+                Read Excel by Stream
+            </div>
+            <div class='panel-body'>
+                
+                @using (Html.BeginForm("read", "excel", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                { 
+                    <div class='form-inline'>
+                        <div class='form-group'>                                        
+                            <input type="file" name="FileUpload"  />                                          
+                        </div>
+                        <div class='form-group'>
+                            <button type="submit" class='btn btn-default'>Upload</button>  
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+
+    <div class='col-xs-6'>
+        
+        <div class='panel panel-default'>
+            <div class='panel-heading'>
+                Read Excel by Path
+            </div>
+            <div class='panel-body'>
+
+                @using (Html.BeginForm("read", "excel", FormMethod.Post))
+                {
+                    <div class='form-inline'>
+                        <div class='form-group'>                                        
+                            <input type="text" name="path" value="/files/test.xlsx" class='form-control'  />                                          
+                        </div>
+                        <div class='form-group'>
+                            <button type="submit" class='btn btn-default'>Read</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+
+    <div class='col-xs-12'>
+        
+        @if (Model != null && Model.Rows.Count > 0)
+        {
+            <div class='panel panel-info'>
+                <div class='panel-heading'>Read Excel Result</div>
+                <div class='panel-body'>
+                    <table class='table'>
+                        <thead>
+                            <tr>
+                                @foreach (System.Data.DataColumn col in Model.Columns)
+                                {
+                                    <th>@col.Caption</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (System.Data.DataRow row in Model.Rows)
+                        {
+                            <tr>
+                                @foreach (var cell in row.ItemArray)
+                                {
+                                    <td>@cell.ToString()</td>
+                                }
+                            </tr>
+                        }      
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class='panel panel-warning'>
+                <div class='panel-heading'>Read Excel Result</div>
+                <div class='panel-body text-center'>
+                    File Not Found !!!
+                </div>
+            </div>
+        }
+
+    </div>
+
+</div>
