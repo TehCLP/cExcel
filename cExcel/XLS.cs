@@ -74,6 +74,43 @@ namespace cExcel
             }
         }
 
+        public bool createExcel(FileInfo fi, DataTable dt, string sheetName)
+        {
+            bool b = false;
+
+            try
+            {
+                // Gen File Excel
+                //var xls = new Workbook();
+                //
+                //ExcelWorksheet sheet = xlsx.Workbook.Worksheets.Add(sheetName);
+                //genTheadExcel(ref sheet, dt);
+                //
+                //int row = _startRow + 1; // start rows at lineIndex 2
+                //int totalCol = dt.Columns.Count;
+                //
+                //foreach (DataRow dr in dt.Rows)
+                //{
+                //    for (int col = 0; col < totalCol; col++)
+                //    {
+                //        sheet.Cells[row, (col + _startCol)].Value = dr[col];
+                //    }
+                //    row++;
+                //}
+                //
+                //xlsx.Save();
+                b = true;
+                
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                b = false;
+            }
+
+            return b;
+        }
+
         internal void create()
         {
             //create new xls file

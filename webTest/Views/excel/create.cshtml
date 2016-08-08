@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div>
+    
+    <div class='col-xs-12'>
+        
+        <div class='panel panel-default'>
+            <div class='panel-heading'>
+                Create File Excel ( .xls or .xlsx )
+            </div>
+            <div class='panel-body'>
+                
+                @using (Html.BeginForm("create", "excel", FormMethod.Post))
+                { 
+                    <div class='form-inline'>
+                        <div class='form-group'>                                 
+                            <div class="input-group">
+                                <div class="input-group-addon">fileName</div>
+                                <input type="text" class="form-control" id="fileName" name="fileName" placeholder="'fileName.xls'" value="fileName.xls"> 
+                            </div>                                        
+                        </div>
+                        <div class='form-group'>
+                            <button type="submit" class='btn btn-default'>Upload</button>  
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+
+    </div>
+
+    <div class='col-xs-12'>
+        
+       
+
+    </div>
+
+</div>
+

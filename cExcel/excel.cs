@@ -55,5 +55,39 @@ namespace cExcel
                 return null;
             }
         }
+
+        public bool createExcel(string path, DataTable data, string sheetName = "Sheet1")
+        {
+            bool b = false;
+
+            if (data != null && data.Rows.Count > 0)
+            {
+                string ext = Path.GetFileName(path).ToLower();
+                if (ext.EndsWith(".xls") || ext.EndsWith(".xlsx"))
+                {
+                    dynamic excel;
+                    if (ext.EndsWith(".xls"))
+                        excel = new XLS();
+                    else
+                        excel = new XLSX();
+
+                    b = excel.createExcel(genFileInfo(path), data, sheetName);
+                }
+            }
+
+            return b;
+        }
+        private FileInfo genFileInfo(string path)
+        {
+            string folder = Path.GetDirectoryName(path);
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+
+            FileInfo fi = new FileInfo(path);
+            
+            return fi;
+        }
     }
 }

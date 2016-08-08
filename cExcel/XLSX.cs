@@ -10,6 +10,9 @@ namespace cExcel
 {
     internal class XLSX
     {
+        private int _startRow = 1;
+        private int _startCol = 1;
+
         public DataTable readToDT(string path)
         {
             FileInfo fi = new FileInfo(path);
@@ -76,6 +79,63 @@ namespace cExcel
             {
                 string msg = ex.Message;
                 return null;
+            }
+        }
+
+        public bool createExcel(FileInfo fi, DataTable dt, string sheetName)
+        {
+            bool b = false;
+
+            try
+            {
+                // Gen File Excel
+                using (var xlsx = new ExcelPackage(fi))
+                {
+                    ExcelWorksheet sheet = xlsx.Workbook.Worksheets.Add(sheetName);
+                    genTheadExcel(ref sheet, dt);
+
+                    int row = _startRow + 1; // start rows at lineIndex 2
+                    int totalCol = dt.Columns.Count;
+
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        for (int col = 0; col < totalCol; col++)
+                        {
+                            sheet.Cells[row, (col + _startCol)].Value = dr[col];
+                        }
+                        row++;
+                    }
+
+                    xlsx.Save();
+                    b = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                b = false;
+            }
+
+            return b;
+        }
+        private void genTheadExcel(ref ExcelWorksheet sheet, DataTable dt)
+        {
+            int x = _startRow; // row
+            int y = _startCol; // col
+            foreach (DataColumn col in dt.Columns)
+            {
+                sheet.Cells[x, y].Value = col.ColumnName;
+                y++;
+            }
+
+            // # set style
+            using (var range = sheet.Cells[x, x, x, y])
+            {
+                range.Style.Font.Bold = true;
+                range.Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                //range.Style.Fill.BackgroundColor.SetColor(Color.Gray);
+                //range.Style.Font.Color.SetColor(Color.White);
+                range.Style.ShrinkToFit = false;
             }
         }
     }
