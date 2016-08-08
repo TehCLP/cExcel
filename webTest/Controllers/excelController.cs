@@ -13,16 +13,22 @@ namespace webTest.Controllers
     {
         public ActionResult read()
         {
+            if (TempData["excelReadModel"] != null)
+            {
+                ViewBag.excelReadModel = TempData["excelReadModel"];
+            }
+
             return View();
         }
 
         [HttpPost]
-        public ActionResult read(DataTable model)
+        public ActionResult upload()
         {
             DataTable dt = new DataTable();
 
             string _path = Request["path"];
-
+            string _fileName = Request["fileName"];
+            
             if (!string.IsNullOrEmpty(_path))
             {
                 _path = Server.MapPath(_path);
@@ -41,11 +47,20 @@ namespace webTest.Controllers
                     //file.SaveAs(path);
 
                     cExcel.excel ex = new cExcel.excel();
-                    dt = ex.readToDataTable(file.InputStream, fileName);
+                    dt = ex.readToDataTable(file.InputStream, fileName);                    
                 }
             }
 
-            return View(dt);
+            TempData["excelReadModel"] = dt;
+
+            if (!string.IsNullOrEmpty(_fileName))
+            {
+                return Json(true);
+            }
+            else
+            {
+                return RedirectToAction("read");
+            }
         }
 
     }

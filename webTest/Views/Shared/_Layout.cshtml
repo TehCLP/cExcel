@@ -23,6 +23,8 @@
     
     </div>
 
+    @Html.Hidden("h_prefix", @Url.Content("~"))
+
     @Scripts.Render("~/script/vender/jquery")
     @RenderSection("scripts", required: false)
 </body>
