@@ -71,7 +71,8 @@ namespace cExcel
                     else
                         excel = new XLSX();
 
-                    b = excel.createExcel(genFileInfo(path), data, sheetName);
+                    FileInfo fi = genFileInfo(path);
+                    b = excel.createExcel(fi, data, sheetName);
                 }
             }
 

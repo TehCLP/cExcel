@@ -10,6 +10,9 @@ namespace cExcel
 {
     internal class XLS
     {
+        private int _startRow = 1;
+        private int _startCol = 1;
+
         public DataTable readToDT(string path)
         {
             FileInfo fi = new FileInfo(path);
@@ -80,25 +83,39 @@ namespace cExcel
 
             try
             {
-                // Gen File Excel
-                //var xls = new Workbook();
-                //
-                //ExcelWorksheet sheet = xlsx.Workbook.Worksheets.Add(sheetName);
-                //genTheadExcel(ref sheet, dt);
-                //
-                //int row = _startRow + 1; // start rows at lineIndex 2
-                //int totalCol = dt.Columns.Count;
-                //
-                //foreach (DataRow dr in dt.Rows)
-                //{
-                //    for (int col = 0; col < totalCol; col++)
-                //    {
-                //        sheet.Cells[row, (col + _startCol)].Value = dr[col];
-                //    }
-                //    row++;
-                //}
-                //
-                //xlsx.Save();
+                //create(fi.FullName);
+
+                Workbook xls = new Workbook();
+                Worksheet sheet = new Worksheet(sheetName);
+                genTheadExcel(ref sheet, dt);
+
+                int row = _startRow + 1; // start rows at lineIndex 2
+                int totalCol = dt.Columns.Count;
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    for (int col = 0; col < totalCol; col++)
+                    {
+                        var type = dr[col].GetType();
+                        if (dr[col] == System.DBNull.Value || dr[col] == null)
+                        {
+                            sheet.Cells[row, (col + _startCol)] = new Cell(dr[col].ToString());
+                        }
+                        else if (type == typeof(DateTime))
+                        {
+                            sheet.Cells[row, (col + _startCol)] = new Cell(dr[col], CellFormat.Date);
+                        }
+                        else
+                        {
+                            sheet.Cells[row, (col + _startCol)] = new Cell(dr[col]);
+                        }
+                    }
+                    row++;
+                }
+
+                xls.Worksheets.Add(sheet);
+                xls.Save(fi.FullName);
+
                 b = true;
                 
             }
@@ -110,11 +127,21 @@ namespace cExcel
 
             return b;
         }
+        private void genTheadExcel(ref Worksheet sheet, DataTable dt)
+        {
+            int x = _startRow; // row
+            int y = _startCol; // col
+            foreach (DataColumn col in dt.Columns)
+            {
+                sheet.Cells[x, y] = new Cell(col.ColumnName);
+                y++;
+            }
+        }
 
-        internal void create()
+        private void create(string path)
         {
             //create new xls file
-            string file = "C:\\newdoc.xls";
+            string _file = path; //"C:\\newdoc.xls";
             Workbook workbook = new Workbook();
             Worksheet worksheet = new Worksheet("First Sheet");
             worksheet.Cells[0, 1] = new Cell((short)1);
@@ -126,7 +153,7 @@ namespace cExcel
             worksheet.Cells[5, 1] = new Cell(DateTime.Now, @"YYYY\-MM\-DD");
             worksheet.Cells.ColumnWidth[0, 1] = 3000;
             workbook.Worksheets.Add(worksheet);
-            workbook.Save(file);
+            workbook.Save(_file);
 
         }
     }

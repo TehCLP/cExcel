@@ -94,13 +94,19 @@ namespace cExcel
                     ExcelWorksheet sheet = xlsx.Workbook.Worksheets.Add(sheetName);
                     genTheadExcel(ref sheet, dt);
 
-                    int row = _startRow + 1; // start rows at lineIndex 2
+                    int row = _startRow + 1; // start rows at next row from start row
                     int totalCol = dt.Columns.Count;
 
                     foreach (DataRow dr in dt.Rows)
                     {
                         for (int col = 0; col < totalCol; col++)
                         {
+                            var type = dr[col].GetType();
+                            if (type == typeof(DateTime))
+                            {
+                                sheet.Cells[row, (col + _startCol)].Style.Numberformat.Format = "yyyy-mm-dd";
+                            }
+
                             sheet.Cells[row, (col + _startCol)].Value = dr[col];
                         }
                         row++;
@@ -127,6 +133,8 @@ namespace cExcel
                 sheet.Cells[x, y].Value = col.ColumnName;
                 y++;
             }
+
+            y--; // decrease index of col
 
             // # set style
             using (var range = sheet.Cells[x, x, x, y])

@@ -20,7 +20,7 @@
                         <div class='form-group'>                                 
                             <div class="input-group">
                                 <div class="input-group-addon">fileName</div>
-                                <input type="text" class="form-control" id="fileName" name="fileName" placeholder="'fileName.xls'" value="fileName.xls"> 
+                                <input type="text" class="form-control" id="fileName" name="fileName" placeholder="'fileName.xls'" value="fileName.xls">
                             </div>                                        
                         </div>
                         <div class='form-group'>
@@ -29,6 +29,19 @@
                     </div>
                 }
 
+                @if (ViewBag.excelCreateFlag != null)
+                {
+                    <hr class='clearfix' />
+                    
+                    if (ViewBag.excelCreateFlag)
+                    {                        
+                        <div class='alert alert-info'>Create Excel Success !!!</div>
+                    }
+                    else
+                    {
+                        <div class='alert alert-warning'>Have Problem to Create Excel !!!</div>
+                    } 
+                }
             </div>
         </div>
 

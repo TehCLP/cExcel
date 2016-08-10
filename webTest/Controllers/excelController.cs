@@ -74,36 +74,36 @@ namespace webTest.Controllers
         {
             if (!string.IsNullOrEmpty(fileName))
             {
-                //cExcel.excel ex = new cExcel.excel();
+                string path = Server.MapPath(fileName);
+                DataTable data = createTmpData();
+
+                cExcel.excel ex = new cExcel.excel();
+                ViewBag.excelCreateFlag = ex.createExcel(path, data, "sheet_test");
             }
-
-            string f = Server.MapPath("/files/test.xlsx");
-
-            string p = Path.GetFileName(f);
-            string d = Path.GetDirectoryName(f);
-            FileInfo fi = new FileInfo(f);
-            string xx = fi.Name;
-            string yy = fi.FullName;
-
+            
             return View();
         }
 
         private DataTable createTmpData()
         {
             DataTable dt = new DataTable();
-            dt.Columns.Add("id", typeof(string));
+            dt.Columns.Add("id", typeof(int));
             dt.Columns.Add("name", typeof(string));
             dt.Columns.Add("lastname", typeof(string));
             dt.Columns.Add("gender", typeof(string));
+            dt.Columns.Add("date", typeof(DateTime));
+            dt.Columns.Add("date2", typeof(DateTime));
             dt.Columns.Add("remark", typeof(string));
 
             DataRow dr;
             for (int i = 0; i < 5; i++)
             {
                 dr = dt.NewRow();
-                dr["id"] = (i + 1).ToString();
+                dr["id"] = (i + 1);
                 dr["name"] = string.Format("test_{0}", i);
                 dr["lastname"] = string.Format("lname_{0}", i);
+                dr["date"] = DateTime.Now.AddDays(i);
+                if (i == 2) dr["date2"] = DateTime.Now;
                 dr["remark"] = Guid.NewGuid().ToString();
                 dt.Rows.Add(dr);
             }
