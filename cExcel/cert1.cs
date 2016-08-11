@@ -52,5 +52,5 @@ namespace cExcel
 
     //        return DotNetUtilities.ToX509Certificate(newCert).Export(System.Security.Cryptography.X509Certificates.X509ContentType.Pkcs12, "password");
     //    }
-    //}
+    }
 }

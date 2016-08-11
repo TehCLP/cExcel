@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="cert1.cs" />
+    <Compile Include="cert2.cs" />
     <Compile Include="excel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XLS.cs" />

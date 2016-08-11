@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using System.Security.Cryptography.X509Certificates;
+
 namespace cExcel
 {
     public class cert2
@@ -165,5 +167,26 @@ namespace cExcel
 
         //    return bRet;
         //}
+
+        public static void writefile_cer(X509Certificate2 cert, string path)
+        {
+            // extension *.cer
+
+            StringBuilder builder = new StringBuilder();
+
+            builder.AppendLine("-----BEGIN CERTIFICATE-----");
+            builder.AppendLine(Convert.ToBase64String(cert.Export(X509ContentType.Cert), Base64FormattingOptions.InsertLineBreaks));
+            builder.AppendLine("-----END CERTIFICATE-----");
+
+            System.IO.File.WriteAllText(path, builder.ToString());
+        }
+
+        public static void writefile_pfx(X509Certificate2 cert, string path)
+        {
+            // extension *.pfx
+
+            byte[] certData = cert.Export(X509ContentType.Pfx, "MyPassword");
+            System.IO.File.WriteAllBytes(path, certData);
+        }
     }
 }
